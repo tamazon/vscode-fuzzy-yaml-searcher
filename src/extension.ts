@@ -2,6 +2,8 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { load } from 'js-yaml';
+import SourceMap from "js-yaml-source-map";
+import { listeners } from 'process';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -33,11 +35,14 @@ export function activate(context: vscode.ExtensionContext) {
 	}
 
 	let textEditor = vscode.window.activeTextEditor;
+
 	if (textEditor) {
 		const document = textEditor.document;
 		const test_string: string = document.getText();
 		console.log(test_string);
-		const yaml_data = load(test_string);
+		const map = new SourceMap();
+		console.log(map)
+		const yaml_data = load(test_string, {listener: map.listen() });
 		console.log(yaml_data);
 		const parsed = propertiesToArray(yaml_data);
 		console.log(parsed);
@@ -46,7 +51,9 @@ export function activate(context: vscode.ExtensionContext) {
 			placeHolder: 'one, two or three',
 			// QuickItemでフォーカスがあたった際に呼び出されるコールバック
 		onDidSelectItem: item =>
-					vscode.window.showInformationMessage(item)
+			// vscode.window.showInformationMessage(map.lookup(item.toString))
+			console.log(map.lookup(item));
+			// vscode.window.showInformationMessage(map.lookup(item));
 		});
 	}
 
