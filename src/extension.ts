@@ -51,11 +51,13 @@ export function activate(context: vscode.ExtensionContext) {
 			const result = vscode.window.showQuickPick(parsed, {
 				placeHolder: 'one, two or three',
 				// QuickItemでフォーカスがあたった際に呼び出されるコールバック
-			onDidSelectItem: item =>
+			onDidSelectItem: item => 
 				// vscode.window.showInformationMessage(map.lookup(item.toString))
-				console.log(map.lookup(item));
+				console.log(map.lookup(item).line.toString()
+				)
 				// vscode.window.showInformationMessage(map.lookup(item));
-			});
+			})
+			.then(item => vscode.window.showInformationMessage(map.lookup(item).line.toString()));
 		}
 
 	// The command has been defined in the package.json file
