@@ -35,29 +35,38 @@ export function activate(context: vscode.ExtensionContext) {
 			return paths(obj);
 		}
 
+		function jumpToPosition(editor: vscode.TextEditor, lineNumber: number) {
+			console.log(lineNumber);
+			// let newPosition = editor.document.positionAt(lineNumber - 1);
+			let newPosition = new vscode.Position(lineNumber - 1, 0);
+			console.log(newPosition);
+                        editor.selection = new vscode.Selection(newPosition, newPosition);
+                        editor.revealRange(new vscode.Range(newPosition, newPosition), vscode.TextEditorRevealType.InCenter);
+		}
+
 		let textEditor = vscode.window.activeTextEditor;
 
 		if (textEditor) {
 			const document = textEditor.document;
 			const test_string: string = document.getText();
-			console.log(test_string);
+			// console.log(test_string);
 			const map = new SourceMap();
-			console.log(map)
+			// console.log(map)
 			const yaml_data = load(test_string, {listener: map.listen() });
-			console.log(yaml_data);
+			// console.log(yaml_data);
 			const parsed = propertiesToArray(yaml_data);
-			console.log(parsed);
+			// console.log(parsed);
 
 			const result = vscode.window.showQuickPick(parsed, {
 				placeHolder: 'one, two or three',
 				// QuickItemでフォーカスがあたった際に呼び出されるコールバック
 			onDidSelectItem: item => 
 				// vscode.window.showInformationMessage(map.lookup(item.toString))
-				console.log(map.lookup(item).line.toString()
-				)
+				console.log(map.lookup(item).line.toString())
 				// vscode.window.showInformationMessage(map.lookup(item));
 			})
-			.then(item => vscode.window.showInformationMessage(map.lookup(item).line.toString()));
+			// .then(item => vscode.window.showInformationMessage(map.lookup(item).line.toString()));
+			.then(item => jumpToPosition(textEditor, map.lookup(item).line));
 		}
 
 	// The command has been defined in the package.json file
