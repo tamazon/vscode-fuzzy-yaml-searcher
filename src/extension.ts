@@ -11,6 +11,14 @@ export function activate(context: vscode.ExtensionContext) {
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "fuzzy-yaml-sercher" is now active!');
 
+
+	const result = vscode.window.showQuickPick(['one>two>tree', 'two>tree', 'three'], {
+		placeHolder: 'one, two or three',
+		// QuickItemでフォーカスがあたった際に呼び出されるコールバック
+	onDidSelectItem: item =>
+				vscode.window.showInformationMessage(`Let's go`)
+	});
+
 	let textEditor = vscode.window.activeTextEditor;
 	if (textEditor) {
 		const document = textEditor.document;
