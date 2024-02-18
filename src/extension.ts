@@ -11,13 +11,26 @@ export function activate(context: vscode.ExtensionContext) {
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "fuzzy-yaml-sercher" is now active!');
 
-
-	const result = vscode.window.showQuickPick(['one>two>tree', 'two>tree', 'three'], {
-		placeHolder: 'one, two or three',
-		// QuickItemでフォーカスがあたった際に呼び出されるコールバック
-	onDidSelectItem: item =>
-				vscode.window.showInformationMessage(`Let's go`)
-	});
+	function propertiesToArray(obj: Object) {
+		const isObject = val =>
+			val && typeof val === 'object' && !Array.isArray(val);
+	
+		const addDelimiter = (a, b) =>
+			a ? `${a}.${b}` : b;
+	
+		const paths = (obj = {}, head = '') => {
+			return Object.entries(obj)
+				.reduce((product, [key, value]) => 
+					{
+						let fullPath = addDelimiter(head, key);
+						return isObject(value) ?
+							product.concat(paths(value, fullPath))
+						: product.concat(fullPath);
+					}, []);
+		};
+	
+		return paths(obj);
+	}
 
 	let textEditor = vscode.window.activeTextEditor;
 	if (textEditor) {
@@ -26,6 +39,15 @@ export function activate(context: vscode.ExtensionContext) {
 		console.log(test_string);
 		const yaml_data = load(test_string);
 		console.log(yaml_data);
+		const parsed = propertiesToArray(yaml_data);
+		console.log(parsed);
+
+		const result = vscode.window.showQuickPick(parsed, {
+			placeHolder: 'one, two or three',
+			// QuickItemでフォーカスがあたった際に呼び出されるコールバック
+		onDidSelectItem: item =>
+					vscode.window.showInformationMessage(item)
+		});
 	}
 
 	// The command has been defined in the package.json file
