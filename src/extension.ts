@@ -9,10 +9,10 @@ import { listeners } from 'process';
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
-	let disposable = vscode.commands.registerCommand('fuzzy-yaml-sercher.helloWorld', () => {
+	let disposable = vscode.commands.registerCommand('fuzzy-yaml-searcher.helloWorld', () => {
 		// Use the console to output diagnostic information (console.log) and errors (console.error)
 		// This line of code will only be executed once when your extension is activated
-		console.log('Congratulations, your extension "fuzzy-yaml-sercher" is now active!');
+		console.log('Congratulations, your extension "fuzzy-yaml-searcher" is now active!');
 
 		function propertiesToArray(obj: Object) {
 			const isObject = val =>
@@ -73,7 +73,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// Now provide the implementation of the command with registerCommand
 		// The code you place here will be executed every time your command is executed
 		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from fuzzy-yaml-sercher!');
+		vscode.window.showInformationMessage('Hello World from fuzzy-yaml-searcher!');
 	});
 
 	context.subscriptions.push(disposable);

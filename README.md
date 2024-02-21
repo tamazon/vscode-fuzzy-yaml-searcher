@@ -1,6 +1,6 @@
-# fuzzy-yaml-sercher README
+# fuzzy-yaml-searcher README
 
-This is the README for your extension "fuzzy-yaml-sercher". After writing up a brief description, we recommend including the following sections.
+This is the README for your extension "fuzzy-yaml-searcher". After writing up a brief description, we recommend including the following sections.
 
 ## Features
 
