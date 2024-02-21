@@ -5,15 +5,9 @@ import { load } from 'js-yaml';
 import SourceMap from "js-yaml-source-map";
 import { listeners } from 'process';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
-	let disposable = vscode.commands.registerCommand('fuzzy-yaml-searcher.helloWorld', () => {
-		// Use the console to output diagnostic information (console.log) and errors (console.error)
-		// This line of code will only be executed once when your extension is activated
-		console.log('Congratulations, your extension "fuzzy-yaml-searcher" is now active!');
-
+	let disposable = vscode.commands.registerCommand('fuzzy-yaml-searcher.fuzzy-yaml-search', () => {
 		function propertiesToArray(obj: Object) {
 			const isObject = val =>
 				val && typeof val === 'object' && !Array.isArray(val);
@@ -36,8 +30,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 
 		function jumpToPosition(editor: vscode.TextEditor, lineNumber: number) {
-			console.log(lineNumber);
-			// let newPosition = editor.document.positionAt(lineNumber - 1);
+			vscode.window.showInformationMessage(lineNumber.toString());
 			let newPosition = new vscode.Position(lineNumber - 1, 0);
 			console.log(newPosition);
                         editor.selection = new vscode.Selection(newPosition, newPosition);
@@ -49,35 +42,21 @@ export function activate(context: vscode.ExtensionContext) {
 		if (textEditor) {
 			const document = textEditor.document;
 			const test_string: string = document.getText();
-			// console.log(test_string);
 			const map = new SourceMap();
-			// console.log(map)
 			const yaml_data = load(test_string, {listener: map.listen() });
-			// console.log(yaml_data);
 			const parsed = propertiesToArray(yaml_data);
-			// console.log(parsed);
 
 			const result = vscode.window.showQuickPick(parsed, {
 				placeHolder: 'one, two or three',
 				// QuickItemでフォーカスがあたった際に呼び出されるコールバック
 			onDidSelectItem: item => 
-				// vscode.window.showInformationMessage(map.lookup(item.toString))
 				console.log(map.lookup(item).line.toString())
-				// vscode.window.showInformationMessage(map.lookup(item));
 			})
-			// .then(item => vscode.window.showInformationMessage(map.lookup(item).line.toString()));
 			.then(item => jumpToPosition(textEditor, map.lookup(item).line));
 		}
-
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from fuzzy-yaml-searcher!');
 	});
 
 	context.subscriptions.push(disposable);
 }
 
-// This method is called when your extension is deactivated
 export function deactivate() {}

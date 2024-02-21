@@ -14,8 +14,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "fuzzy-yaml-searcher.helloWorld",
-        "title": "Hello World"
+        "command": "fuzzy-yaml-searcher.fuzzy-yaml-search",
+        "title": "fuzzy yaml search"
       }
     ]
   },
